@@ -6,61 +6,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Chat Flask</title>
-    <style>
-        div.message_holder{
-            color:black;
-        }
-    </style>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+    <link rel="stylesheet" href="static/css/style.css">
 </head>
 
 <body>
 
-    <div class="message_holder"></div>
+    <div class="container">
 
-    <form action="" method="POST">
-        <input type="text" class="username" placeholder="Nombre" />
-        <input type="text" class="message" placeholder="Mensaje" />
-        <input type="submit" value="Enviar"/>
-    </form>
 
-    
+        <div class="row">
+            <table class="mensajes">
+                <caption>Playlist</caption>                
+                {% for video in videos %}
+                    <tr><td class="msg-user"> {{ video.user.username }}:</td> <td> {{ video.videoid }} </td></tr>
+                {% endfor %}                
+            </table>
+        </div>
 
-    <script>
-        
-        var socket = io.connect('http://' + document.domain + ':' + location.port);
+        <div class="row">
+            <form action="" method="POST">
 
-        // Connect
-        socket.on('connect', function(){
-            
-            socket.emit('my event',{
-                data: 'User Connected'
-            })
+                <fieldset>
+                    <legend>Agregar Video</legend>
+                    <input type="text" class="message" placeholder="Url"/>
+                    <input type="submit" class="btn" value="Enviar" />
+                </fieldset>
+                
+            </form>
+        </div>
 
-            var farm = $('form').on('submit', function(e){
-                e.preventDefault()
-                let user_name = $('input.username').val()
-                let user_input = $('input.message').val()
+    </div>
 
-                socket.emit('my event', {
-                    username: user_name,
-                    message: user_input
-                })
-                $('input.message').val('').focus()
-            })
-        })
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+    <script src="/static/js/session.js"></script>
 
-        // my response
-        socket.on('my response', function(msg){
-            console.log(msg)
-            if(typeof msg.username !== "undefined"){
-                $('div.message_holder').append(
-                    '<div><b>'+msg.username+':</b> '+msg.message+'</div>'
-                )
-            }
-        })
-    
-    </script>
 </body>
+
 </html>

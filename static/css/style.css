@@ -1,0 +1,24 @@
+.container {
+    width: 30em;
+    margin: auto;
+}
+
+.row {
+    margin: auto;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table,th,td {
+    border: 1px solid #AAA;
+}
+
+body {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+td.msg-user {
+    font-weight: bold;
+}
