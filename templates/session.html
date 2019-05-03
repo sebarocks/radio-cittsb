@@ -18,7 +18,7 @@
             <table class="mensajes">
                 <caption>Playlist</caption>                
                 {% for video in videos %}
-                    <tr><td class="msg-user"> {{ video.user.username }}:</td> <td> {{ video.videoid }} </td></tr>
+                    <tr><td class="msg-user"> {{ video.user.username }}:</td> <td> {{ video.videoid }}:</td> <td> {{ video.thumbnail }} </td><td>{{video.title}}</td></tr>
                 {% endfor %}                
             </table>
         </div>

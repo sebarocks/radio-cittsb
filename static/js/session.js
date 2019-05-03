@@ -18,7 +18,7 @@ socket.on('connect', function () {
 
         socket.emit('mensaje', {
             username: user_name,
-            message: user_input
+            videoid: user_input
         })
 
         user_input.value = '';
@@ -26,11 +26,11 @@ socket.on('connect', function () {
 })
 
 // my response
-socket.on('mensaje', function (msg) {
-    if (typeof msg.username !== "undefined") {
+socket.on('nuevoVideo', function (msg) {
+    if (typeof msg.videoid !== "undefined") {
 
         var nuevomensaje = document.createElement('tr')
-        nuevomensaje.innerHTML = '<td class="msg-user">' + msg.username + ':</td> <td>' + msg.message + '</td>'
+        nuevomensaje.innerHTML = '<td class="msg-user">' + msg.title + ':</td> <td>' + msg.videoid + '</td> <td>' + msg.thumbnail + '</td>'
         document.querySelector('table.mensajes').appendChild(nuevomensaje)
     }
 })
