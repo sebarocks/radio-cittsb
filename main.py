@@ -7,14 +7,20 @@ import secrets
 import json
 
 
-### APP ###ph
+
+
+### APP ###
 
 app = Flask(__name__)
 app.config['CONFIG_KEY'] = secrets.appKey
 youtubeKey = secrets.youtubeKey
 socketio = SocketIO(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.getcwd() + '\\radio.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(os.getcwd(),'radio.db')
 db = SQLAlchemy(app)
+
+
+
+
 
 
 ### MODELO ###
@@ -41,8 +47,12 @@ class Video(db.Model):
 
 db.create_all()
 
-# FUNCIONES
 
+
+
+
+
+### FUNCIONES ###
 
 def detalle(vidID):
     dataUrl = 'https://www.googleapis.com/youtube/v3/videos?id={}&key={}&fields=items(id,snippet(channelTitle,title,thumbnails))&part=snippet'.format(vidID,youtubeKey)
@@ -51,6 +61,7 @@ def detalle(vidID):
     return det['items'][0]
 
 
+# Agrega un video a la base de datos (tabla video)
 def agregarVideo(user,videoID):
 
     det = detalle(videoID)
@@ -67,6 +78,8 @@ def agregarVideo(user,videoID):
     db.session.commit()
     return nuevoVideo
 
+
+# Obtiene el objeto User desde la base de datos (si usuario no existe, lo agrega)
 def signin(nombre):
     user_actual = User.query.filter_by(username=nombre).first()
     
@@ -77,6 +90,18 @@ def signin(nombre):
         print('    {} se registro'.format(user_actual.username))
     
     return user_actual
+
+
+# Retorna un array con Video IDs relacionados (la API key afecta el resultado)
+def videoRelated(videoID):
+    dataUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&relatedToVideoId=5rOiW_xY-kc&type=video&key={}'.format(secrets.youtubeKey)
+    vidInfo = urllib.request.urlopen(dataUrl)
+    det = json.load(vidInfo)
+    vids = []
+    for item in det['items']:
+        vids.append(item['id']['videoId'])
+    return vids
+
 
 
 
@@ -109,6 +134,8 @@ def player():
 
 
 
+
+
 ### EVENTOS ###
 
 @socketio.on('mensaje')
@@ -118,6 +145,19 @@ def messageRecieved(data, methods=['GET','POST']):
     socketio.emit('nuevoVideo',respuesta)
     print('    {} agrego video {}'.format(newVid.user.username,newVid.videoid))
 
+@socketio.on('siguiente')
+def siguiente():
+    vid_actual = Video.query.filter_by(activo=True).first()
+    if(vid_actual is not None):
+        vid_actual.activo = False
+        db.session.update()
+        db.session.commit()
+        newVid = Video.query.filter_by(activo=True).first()
+    else:
+        newVid = agregarVideo(videoRelated(???)) #siguiente necesita video id de actual en player
+    
+    respuesta = newVid.videoid
+    socketio.emit('playVideo',respuesta)
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)
