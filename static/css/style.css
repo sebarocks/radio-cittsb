@@ -22,3 +22,7 @@ body {
 td.msg-user {
     font-weight: bold;
 }
+
+.thumb {
+    height: 4em;
+}

@@ -67,6 +67,19 @@ def agregarVideo(user,videoID):
     db.session.commit()
     return nuevoVideo
 
+def signin(nombre):
+    user_actual = User.query.filter_by(username=nombre).first()
+    
+    if user_actual is None:
+        user_actual = User(username=nombre)
+        db.session.add(user_actual)
+        db.session.commit()
+        print('    {} se registro'.format(user_actual.username))
+    
+    return user_actual
+
+
+
 
 ### RUTAS ###
 
@@ -77,14 +90,16 @@ def index():
 @app.route('/login',methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        socketio.emit('login',)
+        nombre = request.form['nombre']
+        user = signin(nombre)
+        socketio.emit('signin',dict(id=user.id, name=user.username))
         return redirect(url_for('sessions'))
     else:
         return redirect(url_for('index'))
 
 @app.route('/session')
 def sessions():
-    playlist = Video.query.all()
+    playlist = Video.query.filter_by(activo=True)
     return render_template('session.html',videos=playlist)
 
 @app.route('/player')
@@ -92,14 +107,16 @@ def player():
     return render_template('player.html')
 
 
+
+
 ### EVENTOS ###
 
 @socketio.on('mensaje')
 def messageRecieved(data, methods=['GET','POST']):
-    print('recieved '+str(data))
     newVid = agregarVideo(data['username'], data['videoid'])
-    respuesta = json.dumps(dict(videoid=newVid.videoid, title=newVid.title, thumbnail=newVid.thumbnail))
+    respuesta = dict(user=newVid.user.username, videoid=newVid.videoid, title=newVid.title, thumbnail=newVid.thumbnail)
     socketio.emit('nuevoVideo',respuesta)
+    print('    {} agrego video {}'.format(newVid.user.username,newVid.videoid))
 
 
 if __name__ == '__main__':

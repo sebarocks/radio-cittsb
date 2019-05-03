@@ -1,0 +1,10 @@
+1. autothumbnail antes de enviar
+2. lista de online (usando socket.io)
+3. barrita de avance, indicador de play/pause
+4. Reproducir un video y borrarlo al terminar
+5. /historial (y revivir video)
+6. eventos play pause
+7. cambiar session->index index->login
+8. autodetectar url vs video ID
+9. Multicolumna, agregar video al costado (usar flexbox?)
+10. Borrar de la lista

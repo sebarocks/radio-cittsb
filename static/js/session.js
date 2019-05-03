@@ -8,8 +8,7 @@ if (!user_name) {
 
 // Connect
 socket.on('connect', function () {
-
-    // OBTENER LISTA DE VIDEOS
+    // Notificar online
 
     // ENVIAR URL
     document.addEventListener('submit', function (e) {
@@ -27,12 +26,18 @@ socket.on('connect', function () {
 
 // my response
 socket.on('nuevoVideo', function (msg) {
+    console.log(msg)
     if (typeof msg.videoid !== "undefined") {
 
         var nuevomensaje = document.createElement('tr')
-        nuevomensaje.innerHTML = '<td class="msg-user">' + msg.title + ':</td> <td>' + msg.videoid + '</td> <td>' + msg.thumbnail + '</td>'
+        // MENSAJE
+        nuevomensaje.innerHTML = '<td class="msg-user">' + msg.user + ':</td><td>' + msg.title + '</td> <td><img class="thumb" src="' + msg.thumbnail + '"></td>'
         document.querySelector('table.mensajes').appendChild(nuevomensaje)
     }
+})
+
+socket.on('signin', function (msg){
+    console.log(msg);
 })
 
 socket.on('info', function (msg) {
