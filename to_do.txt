@@ -8,3 +8,4 @@
 8. autodetectar url vs video ID
 9. Multicolumna, agregar video al costado (usar flexbox?)
 10. Borrar de la lista
+11. rellenar con autoplay
