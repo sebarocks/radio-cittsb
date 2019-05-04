@@ -25,15 +25,21 @@ socket.on('connect', function () {
 })
 
 // my response
-socket.on('nuevoVideo', function (msg) {
+socket.on('addedVideo', function (msg) {
     console.log(msg)
     if (typeof msg.videoid !== "undefined") {
 
         var nuevomensaje = document.createElement('tr')
+        nuevomensaje.id = msg.id
         // MENSAJE
         nuevomensaje.innerHTML = '<td class="msg-user">' + msg.user + ':</td><td>' + msg.title + '</td> <td><img class="thumb" src="' + msg.thumbnail + '"></td>'
         document.querySelector('table.mensajes').appendChild(nuevomensaje)
     }
+})
+
+socket.on('removedVideo', function (msg) {
+    var videoRow = document.getElementById(msg);
+    videoRow.parentNode.removeChild(videoRow);
 })
 
 socket.on('signin', function (msg){

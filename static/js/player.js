@@ -15,7 +15,7 @@ function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
         height: '360',
         width: '640',
-        videoId: 'LDU_Txk06tM',
+        videoId: video,
         autoplay: 0,
         events: {
             'onReady': onPlayerReady,
@@ -30,10 +30,9 @@ function onPlayerReady(event) {
 }
 
 function onStateChange(event) {
-    switch(event.data){
-        case YT.PlayerState.ENDED:
-            socket.emit('siguiente');
-            console.log('siguiente!!');
+    if(event.data == YT.PlayerState.ENDED){
+        socket.emit('siguiente',player.getVideoData().video_id);
+        console.log('pidiendo nueva cancion!');
     }
 }
 
@@ -69,12 +68,17 @@ socket.on('connect', function () {
 })
 
 // my response
-socket.on('nuevoVideo', function (msg) {
+socket.on('addedVideo', function (msg) {
     console.log(msg)
     if (typeof msg.videoid !== "undefined") {
-        if(player.getPlayerState() == 2 || player.getPlayerState() == -1){
-            socket.emit('siguiente');
+        if(player.getPlayerState() == 0){
+            socket.emit('siguiente',player.getVideoData().video_id);
         }
+        if(player.getPlayerState() == 5){
+            player.loadVideoById(msg.videoid);
+            player.playVideo();
+        } 
+
         // AUN NO HAY TAblA
         //var nuevomensaje = document.createElement('tr')
         // Agrega a tabla playlist
@@ -84,7 +88,7 @@ socket.on('nuevoVideo', function (msg) {
 })
 
 socket.on('playVideo', function (msg) {
-    console.log('musica tito: '+msg)
+    console.log('musica tito! '+msg)
     if (typeof msg !== "undefined") {
 
         player.loadVideoById(msg)
