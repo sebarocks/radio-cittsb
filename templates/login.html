@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="static/css/style.css">
+    <title>Bienvenido</title>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Bienvenido</h2>
+        <form method="POST" action="login">
+            <fieldset>
+                <legend>Tu Nombre</legend>
+                <input type="text" id="nombre" name="nombre">
+                <input type="submit" name="enviar" value="Entrar">
+            </fieldset>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('submit', () => {
+            let nuevonombre = document.getElementById('nombre').value
+            localStorage.setItem('userRadio',nuevonombre)
+        })
+    </script>
+</body>
+
+</html>

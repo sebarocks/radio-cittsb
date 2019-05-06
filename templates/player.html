@@ -11,11 +11,22 @@
 
 <body>
     <div id="player"></div>
-    <div></div>
-
+    <div class="row">
+        <table class="mensajes">
+            <caption><h3>Playlist</h3></caption>                
+            {% for video in videos %}
+                <tr>
+                    <td class="msg-user"> {{ video.user.username }}:</td> 
+                    <td> {{ video.title }} </td>
+                    <td><img class="thumb" src="{{video.thumbnail}}"></td></tr>
+            {% endfor %}                
+        </table>
+    </div>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
-    <script>var video='{{videoinicial}}'</script>
+    <script>
+        var video='{{videoinicial}}'
+    </script>
     <script src="/static/js/player.js"></script>
 </body>
 

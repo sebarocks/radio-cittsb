@@ -22,7 +22,6 @@ db = SQLAlchemy(app)
 
 
 
-
 ### MODELO ###
 
 class User(db.Model):
@@ -41,12 +40,29 @@ class Video(db.Model):
     thumbnail = db.Column(db.String(60))
     userid = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     activo = db.Column(db.Boolean, nullable=False)
+    videos = db.relationship('Player', backref='video', lazy=True)
 
     def __repr__(self):
         return '<Video %r>' % self.videoid
 
+class Player(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    video_id = db.Column(db.Integer, db.ForeignKey('video.id'), nullable=False)
+    video_time = db.Column(db.Integer)
+
+     def __repr__(self):
+        return '<Player %r %r>' % self.video_id, self.video_time
 
 db.create_all()
+
+### DATOS INICIALES ###
+
+if Video.query.first() is None:
+    crab_rave = Video(videoid='iM_s0yoMepw'
+    )
+
+if Player.query.first() is None:
+    player = Player(video_id)
 
 # crea user autoplay si no existe
 if User.query.filter_by(username='autoplay').first() is None:
@@ -56,8 +72,19 @@ if User.query.filter_by(username='autoplay').first() is None:
 
 
 
-
 ### FUNCIONES ###
+
+def playlist():
+    return Video.query.filter_by(activo=True)
+
+def historial():
+    return Video.query.filter_by(activo=False)
+
+def nextVideo():
+    actual = playlist().first()
+    actual.activo=False
+    db.session.commit()
+    return playlist.first()
 
 def detalle(vidID):
     dataUrl = 'https://www.googleapis.com/youtube/v3/videos?id={}&key={}&fields=items(id,snippet(channelTitle,title,thumbnails))&part=snippet'.format(vidID,youtubeKey)
@@ -114,24 +141,20 @@ def videoRelated(videoID):
 
 ### RUTAS ###
 
-@app.route('/')
-def index():
-    return render_template('index.html')
-
 @app.route('/login',methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         nombre = request.form['nombre']
         user = signin(nombre)
         socketio.emit('signin',dict(id=user.id, name=user.username))
-        return redirect(url_for('sessions'))
-    else:
         return redirect(url_for('index'))
+    else:
+        return render_template('login.html')
 
-@app.route('/session')
-def sessions():
+@app.route('/')
+def index():
     playlist = Video.query.filter_by(activo=True)
-    return render_template('session.html',videos=playlist)
+    return render_template('index.html',videos=playlist)
 
 @app.route('/player')
 def player():
@@ -173,6 +196,11 @@ def siguiente(videoIdActual):
     
     respuesta = newVid.videoid
     socketio.emit('playVideo',respuesta)
+
+@socketio.on('playerout')
+def playerDisconnect(info):
+    playerstate = Player.query.first()
+    playerstate
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)

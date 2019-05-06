@@ -27,6 +27,7 @@ function onYouTubeIframeAPIReady() {
 // The API will call this function when the video player is ready.
 function onPlayerReady(event) {
     event.target.stopVideo();
+    event.target.skipSecond(starttime);
 }
 
 function onStateChange(event) {
@@ -95,11 +96,11 @@ socket.on('playVideo', function (msg) {
     }    
 })
 
-
-socket.on('signin', function (msg){
-    console.log("se registro"+msg);
-})
-
 socket.on('info', function (msg) {
     console.log(msg)
+})
+
+socket.on('disconnect', function(){
+    estado = {player}
+    socket.emit('playerout',estado)
 })
