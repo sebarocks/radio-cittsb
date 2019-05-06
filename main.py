@@ -19,9 +19,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(os.getcwd(),
 db = SQLAlchemy(app)
 
 
-
-
-
 ### MODELO ###
 
 class User(db.Model):
@@ -39,7 +36,7 @@ class Video(db.Model):
     title = db.Column(db.String(80))
     thumbnail = db.Column(db.String(60))
     userid = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    activo = db.Column(db.Boolean, nullable=False)
+    activo = db.Column(db.Boolean, nullable=False) # en cola
     videos = db.relationship('Player', backref='video', lazy=True)
 
     def __repr__(self):
@@ -50,29 +47,18 @@ class Player(db.Model):
     video_id = db.Column(db.Integer, db.ForeignKey('video.id'), nullable=False)
     video_time = db.Column(db.Integer)
 
-     def __repr__(self):
+    def __repr__(self):
         return '<Player %r %r>' % self.video_id, self.video_time
 
 db.create_all()
 
-### DATOS INICIALES ###
-
-if Video.query.first() is None:
-    crab_rave = Video(videoid='iM_s0yoMepw'
-    )
-
-if Player.query.first() is None:
-    player = Player(video_id)
-
-# crea user autoplay si no existe
-if User.query.filter_by(username='autoplay').first() is None:
-    user_autoplay = User(username='autoplay')
-    db.session.add(user_autoplay)
-    db.session.commit()
-
 
 
 ### FUNCIONES ###
+
+
+def getAutoplayUser():
+    return User.query.filter_by(username='autoplay').first()
 
 def playlist():
     return Video.query.filter_by(activo=True)
@@ -80,11 +66,15 @@ def playlist():
 def historial():
     return Video.query.filter_by(activo=False)
 
+def currentVideo():
+    return playlist().first()
+
 def nextVideo():
     actual = playlist().first()
     actual.activo=False
+    Player.query.first().video = currentVideo()
     db.session.commit()
-    return playlist.first()
+    return currentVideo()
 
 def detalle(vidID):
     dataUrl = 'https://www.googleapis.com/youtube/v3/videos?id={}&key={}&fields=items(id,snippet(channelTitle,title,thumbnails))&part=snippet'.format(vidID,youtubeKey)
@@ -126,7 +116,7 @@ def signin(nombre):
 
 
 # Retorna un array con Video IDs relacionados (la API key afecta el resultado)
-def videoRelated(videoID):
+def videosRelated(videoID):
     dataUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&relatedToVideoId={}&type=video&key={}'.format(videoID,secrets.youtubeKey)
     vidInfo = urllib.request.urlopen(dataUrl)
     det = json.load(vidInfo)
@@ -137,9 +127,26 @@ def videoRelated(videoID):
 
 
 
+### DATOS INICIALES ###
+
+
+# crea user autoplay si no existe
+if getAutoplayUser() is None:
+    user_autoplay = User(username='autoplay')
+    db.session.add(user_autoplay)
+    db.session.commit()
+
+if Player.query.first() is None:
+    crab_rave = Video(videoid='iM_s0yoMepw',user=user_autoplay, activo=True)    
+    playerState = Player(video=crab_rave, video_time='74')
+    db.session.add(playerState)
+
+
 
 
 ### RUTAS ###
+
+
 
 @app.route('/login',methods=['GET', 'POST'])
 def login():
@@ -153,15 +160,12 @@ def login():
 
 @app.route('/')
 def index():
-    playlist = Video.query.filter_by(activo=True)
-    return render_template('index.html',videos=playlist)
+    return render_template('index.html',videos=playlist())
 
 @app.route('/player')
 def player():
-    vid_actual = Video.query.filter_by(activo=True).first()
-    if vid_actual is None:
-        return render_template('player.html',videoinicial='iM_s0yoMepw')
-    return render_template('player.html',videoinicial=vid_actual.videoid)
+    playernow=Player.query.first()
+    return render_template('player.html',estadoinicial=dict(vid=playernow.video.videoid, time=playernow.video_time))
 
 
 
@@ -191,7 +195,7 @@ def siguiente(videoIdActual):
         newVid = Video.query.filter_by(activo=True).first()
 
     if(newVid is None):
-        newVid = agregarVideo('autoplay',videoRelated(videoIdActual)[3]) # elije el 3, mejor que sea random
+        newVid = agregarVideo('autoplay',videosRelated(videoIdActual)[3]) # elije el 3, mejor que sea random
         socketio.emit('addedVideo',dict(id=newVid.id, user=newVid.user.username, videoid=newVid.videoid, title=newVid.title, thumbnail=newVid.thumbnail))
     
     respuesta = newVid.videoid

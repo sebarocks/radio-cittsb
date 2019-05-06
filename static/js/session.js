@@ -3,7 +3,7 @@ var socket = io.connect('http://' + document.domain + ':' + location.port);
 let user_name = localStorage.getItem('userRadio')
 
 if (!user_name) {
-    window.location = '/'
+    window.location = '/login'
 }
 
 // Connect
