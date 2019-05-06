@@ -95,7 +95,7 @@ def detalle(vidID):
 
 # Agrega un video a la base de datos (tabla video)
 def agregarVideo(user,videoID):
-    print('agregarVideo('+user+','+videoID+')')
+    #print('agregarVideo('+user+','+videoID+')')
 
     det = detalle(videoID)
     titulo = det['snippet']['title']
