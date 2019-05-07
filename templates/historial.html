@@ -4,9 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Historial</title>
+    <link rel="stylesheet" href="static/css/style.css">
 </head>
 <body>
-    
+    <div class="row">
+        <table class="mensajes">
+            <caption><h3>Historial</h3></caption>                
+            {% for video in videos %}
+                <tr>
+                    <td class="msg-user"> {{ video.user.username }}:</td> 
+                    <td> {{ video.title }} </td>
+                    <td><img class="thumb" src="{{video.thumbnail}}"></td></tr>
+            {% endfor %}                
+        </table>
+    </div>
 </body>
 </html>

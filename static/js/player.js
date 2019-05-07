@@ -16,7 +16,6 @@ function onYouTubeIframeAPIReady() {
         height: '360',
         width: '640',
         videoId: video,
-        autoplay: 0,
         events: {
             'onReady': onPlayerReady,
             'onStateChange' : onStateChange
@@ -25,9 +24,10 @@ function onYouTubeIframeAPIReady() {
 }
 
 // The API will call this function when the video player is ready.
-function onPlayerReady(event) {
-    event.target.stopVideo();
-    event.target.skipSecond(starttime);
+function onPlayerReady(event) {    
+    event.target.playVideo();
+    event.target.seekTo(startTime); 
+       
 }
 
 function onStateChange(event) {
@@ -72,10 +72,9 @@ socket.on('connect', function () {
 socket.on('addedVideo', function (msg) {
     console.log(msg)
     if (typeof msg.videoid !== "undefined") {
-        if(player.getPlayerState() == 0){
-            socket.emit('siguiente',player.getVideoData().video_id);
-        }
+
         if(player.getPlayerState() == 5){
+            console.log('addedvideo-state5');
             player.loadVideoById(msg.videoid);
             player.playVideo();
         } 
@@ -100,7 +99,7 @@ socket.on('info', function (msg) {
     console.log(msg)
 })
 
-socket.on('disconnect', function(){
-    estado = {player}
-    socket.emit('playerout',estado)
-})
+window.onbeforeunload = function(){
+    estado = {vid:player.getVideoData().video_id, time:player.getCurrentTime()};
+    socket.emit('playerout',estado);
+}

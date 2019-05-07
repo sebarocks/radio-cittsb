@@ -1,12 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_socketio import SocketIO
 from flask_sqlalchemy import SQLAlchemy
-import os
-import urllib.request
-import secrets
-import json
-
-
+import os, random, json, urllib.request, secrets
 
 
 ### APP ###
@@ -48,7 +43,7 @@ class Player(db.Model):
     video_time = db.Column(db.Integer)
 
     def __repr__(self):
-        return '<Player %r %r>' % self.video_id, self.video_time
+        return '<Player %r %r>' % (self.video_id, self.video_time)
 
 db.create_all()
 
@@ -58,16 +53,25 @@ db.create_all()
 
 
 def getAutoplayUser():
-    return User.query.filter_by(username='autoplay').first()
+    autoplay = User.query.filter_by(username='autoplay').first()
+    if autoplay is None:
+        autoplay = User(username='autoplay')
+        db.session.add(autoplay)
+        db.session.commit()
+    return autoplay
+
 
 def playlist():
     return Video.query.filter_by(activo=True)
 
-def historial():
+def getHistorial():
     return Video.query.filter_by(activo=False)
 
 def currentVideo():
     return playlist().first()
+
+def currentState():
+    return Player.query.first()
 
 def nextVideo():
     actual = playlist().first()
@@ -130,17 +134,16 @@ def videosRelated(videoID):
 ### DATOS INICIALES ###
 
 
-# crea user autoplay si no existe
-if getAutoplayUser() is None:
-    user_autoplay = User(username='autoplay')
-    db.session.add(user_autoplay)
-    db.session.commit()
-
+user_autoplay = getAutoplayUser()
+print('player query first'+str(Player.query.first()))
 if Player.query.first() is None:
-    crab_rave = Video(videoid='iM_s0yoMepw',user=user_autoplay, activo=True)    
+    det = detalle('LDU_Txk06tM')
+    crab_rave = Video(videoid='LDU_Txk06tM',title=det['snippet']['title'], thumbnail = det['snippet']['thumbnails']['high']['url'], user=user_autoplay, activo=True)
     playerState = Player(video=crab_rave, video_time='74')
+    
+    db.session.add(crab_rave)
     db.session.add(playerState)
-
+    db.session.commit()
 
 
 
@@ -164,12 +167,12 @@ def index():
 
 @app.route('/player')
 def player():
-    playernow=Player.query.first()
-    return render_template('player.html',estadoinicial=dict(vid=playernow.video.videoid, time=playernow.video_time))
+    playernow=currentState()
+    return render_template('player.html',vid_actual=playernow.video.videoid, time_actual=playernow.video_time, playlist=playlist())
 
-
-
-
+@app.route('/historial')
+def historial():
+    return render_template('historial.html', playlist=getHistorial())
 
 
 ### EVENTOS ###
@@ -195,7 +198,8 @@ def siguiente(videoIdActual):
         newVid = Video.query.filter_by(activo=True).first()
 
     if(newVid is None):
-        newVid = agregarVideo('autoplay',videosRelated(videoIdActual)[3]) # elije el 3, mejor que sea random
+        choice = random.choice(videosRelated(videoIdActual))
+        newVid = agregarVideo('autoplay',choice)
         socketio.emit('addedVideo',dict(id=newVid.id, user=newVid.user.username, videoid=newVid.videoid, title=newVid.title, thumbnail=newVid.thumbnail))
     
     respuesta = newVid.videoid
@@ -203,8 +207,11 @@ def siguiente(videoIdActual):
 
 @socketio.on('playerout')
 def playerDisconnect(info):
-    playerstate = Player.query.first()
-    playerstate
+    playerstate = currentState()
+    playerstate.video = currentVideo()
+    playerstate.video_time = int(info['time'])
+    print('    Disconnect'+str(info))
+    db.session.commit()
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)
