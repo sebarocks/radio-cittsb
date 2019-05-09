@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_socketio import SocketIO
 from flask_sqlalchemy import SQLAlchemy
 import os, random, json, urllib.request, secrets
@@ -73,14 +73,7 @@ def currentVideo():
 def currentState():
     return Player.query.first()
 
-def nextVideo():
-    actual = playlist().first()
-    actual.activo=False
-    Player.query.first().video = currentVideo()
-    db.session.commit()
-    return currentVideo()
-
-def detalle(vidID):
+def detalle(vidID): #que pasa si es 404?
     dataUrl = 'https://www.googleapis.com/youtube/v3/videos?id={}&key={}&fields=items(id,snippet(channelTitle,title,thumbnails))&part=snippet'.format(vidID,youtubeKey)
     vidInfo = urllib.request.urlopen(dataUrl) #.decode('utf-8')
     det = json.load(vidInfo)
@@ -105,6 +98,15 @@ def agregarVideo(user,videoID):
     db.session.commit()
     return nuevoVideo
 
+def revivir(user, vIdDb):
+    muerto = Video.query.filter_by(id=vIdDb).first()
+    det = detalle(muerto.videoid)
+    r_titulo = det['snippet']['title']
+    r_thumb = det['snippet']['thumbnails']['high']['url']
+    renacido = Video(videoid=muerto.videoid, title=r_titulo, thumbnail=r_thumb,activo=True)
+    db.session.add(renacido)
+    db.session.commit()
+    socketio.emit('addedvideo',renacido.__dict__)
 
 # Obtiene el objeto User desde la base de datos (si usuario no existe, lo agrega)
 def signin(nombre):
@@ -168,11 +170,20 @@ def index():
 @app.route('/player')
 def player():
     playernow=currentState()
-    return render_template('player.html',vid_actual=playernow.video.videoid, time_actual=playernow.video_time, playlist=playlist())
+    return render_template('player.html',vid_actual=playernow.video.videoid, time_actual=playernow.video_time, videos=playlist())
 
 @app.route('/historial')
 def historial():
-    return render_template('historial.html', playlist=getHistorial())
+    return render_template('historial.html', videos=getHistorial()) 
+
+@app.route('/detalle')
+def details():
+    iddetalle=request.args['vid']
+    det = detalle(iddetalle)
+    r_titulo = det['snippet']['title']
+    r_thumb = det['snippet']['thumbnails']['high']['url']
+    return jsonify(dict(titulo=r_titulo,miniatura=r_thumb))
+
 
 
 ### EVENTOS ###
@@ -195,6 +206,7 @@ def siguiente(videoIdActual):
         vid_actual.activo = False
         db.session.commit()
         socketio.emit('removedVideo',vid_actual.id)
+        print('     removed: {}'.format(vid_actual.id))
         newVid = Video.query.filter_by(activo=True).first()
 
     if(newVid is None):

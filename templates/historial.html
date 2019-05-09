@@ -8,16 +8,21 @@
     <link rel="stylesheet" href="static/css/style.css">
 </head>
 <body>
-    <div class="row">
-        <table class="mensajes">
-            <caption><h3>Historial</h3></caption>                
-            {% for video in videos %}
-                <tr>
-                    <td class="msg-user"> {{ video.user.username }}:</td> 
-                    <td> {{ video.title }} </td>
-                    <td><img class="thumb" src="{{video.thumbnail}}"></td></tr>
-            {% endfor %}                
-        </table>
+    <div class="container">
+        <div class="row">
+            <table class="mensajes">
+                <caption><h3>Historial</h3></caption>                
+                {% for video in videos %}
+                    <tr id="v_{{video.id}}">
+                        <td class="msg-user"> {{ video.user.username }}:</td> 
+                        <td> {{ video.title }} </td>
+                        <td><img class="thumb" src="{{video.thumbnail}}"></td>                  
+                        <td><button>Revivir</button></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
     </div>
+    <script src="/static/js/historial.js"></script>
 </body>
 </html>

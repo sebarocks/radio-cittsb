@@ -18,7 +18,7 @@
             <table class="mensajes">
                 <caption><h3>Playlist</h3></caption>                
                 {% for video in videos %}
-                    <tr>
+                    <tr id="v_{{video.id}}">
                         <td class="msg-user"> {{ video.user.username }}:</td> 
                         <td> {{ video.title }} </td>
                         <td><img class="thumb" src="{{video.thumbnail}}"></td></tr>
@@ -32,7 +32,7 @@
                 <fieldset>
                     <legend>Agregar Video</legend>
                     <input type="text" class="message" placeholder="Url o Video ID"/>
-                    <input type="submit" class="btn" value="Enviar" />
+                    <input type="submit" class="btn" value="Enviar" disabled />
                 </fieldset>
                 
             </form>

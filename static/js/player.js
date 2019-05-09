@@ -11,6 +11,7 @@ firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 //    This function creates an <iframe> (and YouTube player)
 //    after the API code downloads.
 var player;
+
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
         height: '360',
@@ -18,21 +19,21 @@ function onYouTubeIframeAPIReady() {
         videoId: video,
         events: {
             'onReady': onPlayerReady,
-            'onStateChange' : onStateChange
+            'onStateChange': onStateChange
         }
     });
 }
 
 // The API will call this function when the video player is ready.
-function onPlayerReady(event) {    
+function onPlayerReady(event) {
     event.target.playVideo();
-    event.target.seekTo(startTime); 
-       
+    event.target.seekTo(startTime);
+
 }
 
 function onStateChange(event) {
-    if(event.data == YT.PlayerState.ENDED){
-        socket.emit('siguiente',player.getVideoData().video_id);
+    if (event.data == YT.PlayerState.ENDED) {
+        socket.emit('siguiente', player.getVideoData().video_id);
         console.log('pidiendo nueva cancion!');
     }
 }
@@ -73,33 +74,46 @@ socket.on('addedVideo', function (msg) {
     console.log(msg)
     if (typeof msg.videoid !== "undefined") {
 
-        if(player.getPlayerState() == 5){
-            console.log('addedvideo-state5');
-            player.loadVideoById(msg.videoid);
-            player.playVideo();
-        } 
+        // if(player.getPlayerState() == 5){
+        //     console.log('addedvideo-state5');
+        //     player.loadVideoById(msg.videoid);
+        //     player.playVideo();
+        // } 
 
-        // AUN NO HAY TAblA
-        //var nuevomensaje = document.createElement('tr')
-        // Agrega a tabla playlist
-        //nuevomensaje.innerHTML = '<td class="msg-user">' + msg.user + ':</td><td>' + msg.title + '</td> <td><img class="thumb" src="' + msg.thumbnail + '"></td>'
-        //document.querySelector('table.mensajes').appendChild(nuevomensaje)
-    }    
+        var nuevomensaje = document.createElement('tr');
+        nuevomensaje.innerHTML = '<td class="msg-user">' + msg.user + ':</td><td>' + msg.title + '</td> <td><img class="thumb" src="' + msg.thumbnail + '"></td>';
+        nuevomensaje.id = 'v_' + msg.id;
+        document.querySelector('table.mensajes').appendChild(nuevomensaje);
+    }
+})
+
+socket.on('removedVideo', function (msg) {
+    console.log('Removed');
+    console.log(msg);
+    var videoRow = document.getElementById('v_' + msg);
+    videoRow.parentNode.removeChild(videoRow);
 })
 
 socket.on('playVideo', function (msg) {
-    console.log('musica tito! '+msg)
+    console.log('musica tito! ' + msg)
     if (typeof msg !== "undefined") {
 
         player.loadVideoById(msg)
-    }    
+    }
 })
 
 socket.on('info', function (msg) {
     console.log(msg)
 })
 
-window.onbeforeunload = function(){
-    estado = {vid:player.getVideoData().video_id, time:player.getCurrentTime()};
-    socket.emit('playerout',estado);
+function skip(){
+    socket.emit('siguiente',player.getVideoData().video_id);
+}
+
+window.onbeforeunload = function () {
+    estado = {
+        vid: player.getVideoData().video_id,
+        time: player.getCurrentTime()
+    };
+    socket.emit('playerout', estado);
 }

@@ -1,3 +1,7 @@
+
+@import url('https://fonts.googleapis.com/css?family=Mukta');
+/*@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Mono|IBM+Plex+Sans');*/
+
 .container {
     width: 30em;
     margin: auto;
@@ -16,7 +20,7 @@ table,th,td {
 }
 
 body {
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-family: 'Mukta', sans-serif;
 }
 
 td.msg-user {
@@ -25,4 +29,8 @@ td.msg-user {
 
 .thumb {
     height: 4em;
+}
+
+input.message {
+    width: 80%;
 }
