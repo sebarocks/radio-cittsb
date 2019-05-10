@@ -11,6 +11,7 @@ app.config['CONFIG_KEY'] = secrets.appKey
 youtubeKey = secrets.youtubeKey
 socketio = SocketIO(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(os.getcwd(),'radio.db')
+print(app.config['SQLALCHEMY_DATABASE_URI'])
 db = SQLAlchemy(app)
 
 

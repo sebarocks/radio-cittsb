@@ -1,13 +1,13 @@
-- autothumbnail al insertar id/url
+
 - lista de online (usando socket.io)
 - barrita de avance, indicador de play/pause
-- /historial y revivir video
-- parsear urls tambien
+- revivir video
 - Multicolumna, agregar video al costado (usar flexbox?)
 - Borrar de la lista (solo player)
 - Modularizar en distintos archivos
-- verificar input agregar video, habilitar solo si esta verifcado
 - now playing en tabla playlist
-- 
+- mostrar enviando...
+
 - bug: F5 no guarda video-time
 - bug: autoplay agrega un stream
+- bug: no limpia formulario
