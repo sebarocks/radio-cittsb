@@ -81,7 +81,7 @@ socket.on('addedVideo', function (msg) {
         // } 
 
         var nuevomensaje = document.createElement('tr');
-        nuevomensaje.innerHTML = '<td class="msg-user">' + msg.user + ':</td><td>' + msg.title + '</td> <td><img class="thumb" src="' + msg.thumbnail + '"></td>';
+        nuevomensaje.innerHTML = '<td class="msg-user">' + msg.user + ':</td><td>' + msg.title + '</td> <td><img class="thumb" src="' + msg.thumbnail + '"><td></td></td>';
         nuevomensaje.id = 'v_' + msg.id;
         document.querySelector('table.mensajes').appendChild(nuevomensaje);
     }
@@ -115,5 +115,6 @@ window.onbeforeunload = function () {
         vid: player.getVideoData().video_id,
         time: player.getCurrentTime()
     };
+
     socket.emit('playerout', estado);
 }

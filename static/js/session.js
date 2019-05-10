@@ -26,42 +26,39 @@ function getDetails(videoID){
 
 function cargarPreview(obj){
     //limpia lo que hay
-    let prevista = document.getElementById('preview');
-    prevista.parentNode.removeChild(prevista);
+    let prevista = document.querySelector('table.prevista');
+    while(prevista.firstChild){
+        prevista.removeChild(prevista.firstChild);
+    }
 
-    var premensaje = document.createElement('tr');
-    nuevomensaje.innerHTML = '<td>' + msg.title + '</td> <td><img class="thumb" src="' + msg.thumbnail + '"></td>';
-    document.querySelector('table.mensajes').appendChild(nuevomensaje);
-    prevista.appendChild(premensaje);
+    let previewRow = document.createElement('tr');
+    previewRow.innerHTML = '<td>' + obj.titulo + '</td> <td><img class="thumb" src="' + obj.miniatura + '"></td>';
+    document.querySelector('table.prevista').appendChild(previewRow);
 }
 
 // Connect
 socket.on('connect', function () {
     // Notificar online
 
-    document.querySelector('input.message').oninput((e) => {
+    document.querySelector('input.message').addEventListener('input', (e) => {
         let user_input = e.target.value;
-        let videoIdMatch = matchYoutubeUrl(user_input);
+        let videoIdMatch = matchYoutubeUrl(user_input)
         if(videoIdMatch){
-            fetch('http://' + document.domain + ':' + location.port + '/detalle'+user_input)
-                .then( res => res.json())
-                .then( myjson => {
-
-                })
+            getDetails(videoIdMatch);
+            document.querySelector('input.btnEnviar').removeAttribute('disabled');
+        }
+        else {
+            document.querySelector('input.btnEnviar').setAttribute('disabled',true);
         }
     })
     
     document.addEventListener('submit', function (e) {
         e.preventDefault()
         let user_input = document.querySelector('input.message').value;
-        let videoIdMatch = matchYoutubeUrl(user_input);
 
-        if(!videoIdMatch){
-            fetch('http://' + document.domain + ':' + location.port + '/detalle'+user_input)
-        }
         socket.emit('mensaje', {
             username: user_name,
-            videoid: user_input
+            videoid: matchYoutubeUrl(user_input)
         })
 
         user_input.value = '';

@@ -14,6 +14,12 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(os.getcwd(),
 db = SQLAlchemy(app)
 
 
+
+
+
+
+
+
 ### MODELO ###
 
 class User(db.Model):
@@ -49,6 +55,14 @@ db.create_all()
 
 
 
+
+
+
+
+
+
+
+
 ### FUNCIONES ###
 
 
@@ -72,6 +86,11 @@ def currentVideo():
 
 def currentState():
     return Player.query.first()
+
+def savePlayer(vid):
+    currentState().video_id= vid
+    currentState().video_time = 0
+    db.session.commit()
 
 def detalle(vidID): #que pasa si es 404?
     dataUrl = 'https://www.googleapis.com/youtube/v3/videos?id={}&key={}&fields=items(id,snippet(channelTitle,title,thumbnails))&part=snippet'.format(vidID,youtubeKey)
@@ -133,6 +152,10 @@ def videosRelated(videoID):
 
 
 
+
+
+
+
 ### DATOS INICIALES ###
 
 
@@ -149,8 +172,12 @@ if Player.query.first() is None:
 
 
 
-### RUTAS ###
 
+
+
+
+
+### RUTAS ###
 
 
 @app.route('/login',methods=['GET', 'POST'])
@@ -186,6 +213,11 @@ def details():
 
 
 
+
+
+
+
+
 ### EVENTOS ###
 
 @socketio.on('mensaje')
@@ -216,6 +248,7 @@ def siguiente(videoIdActual):
     
     respuesta = newVid.videoid
     socketio.emit('playVideo',respuesta)
+    savePlayer(newVid.videoid)
 
 @socketio.on('playerout')
 def playerDisconnect(info):

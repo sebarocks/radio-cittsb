@@ -25,6 +25,7 @@
                     <td class="msg-user"> {{ video.user.username }}:</td> 
                     <td> {{ video.title }} </td>
                     <td><img class="thumb" src="{{video.thumbnail}}"></td>
+                    <td><button id=borrar_{{video.id}}>Borrar</button></td>
                 </tr>
             {% endfor %}                
         </table>
