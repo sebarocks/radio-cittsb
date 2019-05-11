@@ -260,5 +260,5 @@ def playerDisconnect(info):
     db.session.commit()
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True)
+    socketio.run(app)
     
