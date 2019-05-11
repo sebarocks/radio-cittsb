@@ -7,7 +7,7 @@
 - Modularizar en distintos archivos
 - now playing en tabla playlist
 - mostrar enviando...
+- multi salas
 
 - bug: F5 no guarda video-time
 - bug: autoplay agrega un stream
-- bug: no limpia formulario
