@@ -61,7 +61,7 @@ socket.on('connect', function () {
             videoid: matchYoutubeUrl(user_input)
         })
 
-        user_input.value = '';
+        user_input = '';
     })
 })
 
