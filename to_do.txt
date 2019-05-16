@@ -10,5 +10,6 @@
 - multi salas
 - no redirect con javascript
 
+- bug: m.youtube.com
 - bug: F5 no guarda video-time
 - bug: autoplay agrega un stream
