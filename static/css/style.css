@@ -3,34 +3,62 @@
 /*@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Mono|IBM+Plex+Sans');*/
 
 .container {
-    width: 30em;
+    width: 100%;
+    max-width: 30em;
     margin: auto;
 }
 
 .row {
     margin: auto;
+    width: 100%;
 }
 
 table {
     border-collapse: collapse;
+    width: 100%;
+    border-radius: 3px;
 }
 
 table,th,td {
     border: 1px solid #AAA;
+    background-color: #c8e6f5;
+}
+
+fieldset {
+    background-color: #c8e6f5
 }
 
 body {
     font-family: 'Mukta', sans-serif;
+    color: #6d3939;
+    background-color: #f2eee0;
 }
 
 td.msg-user {
     font-weight: bold;
 }
 
-.thumb {
+td.thumb {
+    float: right;
+}
+
+img.thumb {
     height: 4em;
+    width: 100%;
 }
 
 input.message {
+    min-width: 10em;
     width: 80%;
+    border: 1px solid #AAA;
+}
+
+input.btnEnviar {
+    width: 5em;
+    border: none;
+    margin: auto;
+    padding: 4px;
+    border-radius: 2px;
+    background-color: #5ca0d3;
+    color: #6d3939;
 }

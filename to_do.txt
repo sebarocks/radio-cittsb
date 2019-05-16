@@ -8,6 +8,7 @@
 - now playing en tabla playlist
 - mostrar enviando...
 - multi salas
+- no redirect con javascript
 
 - bug: F5 no guarda video-time
 - bug: autoplay agrega un stream

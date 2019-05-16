@@ -10,25 +10,27 @@
 </head>
 
 <body>
-    <div id="player"></div>
-
-    <div id="controls">
-        <button>Play/Resume</button>
-        <button id="skip" onclick="skip()">Skip</button>
-    </div>
-
-    <div class="row">
-        <table class="mensajes">
-            <caption><h3>Playlist</h3></caption>                
-            {% for video in videos %}
-                <tr id="v_{{video.id}}">
-                    <td class="msg-user"> {{ video.user.username }}:</td> 
-                    <td> {{ video.title }} </td>
-                    <td><img class="thumb" src="{{video.thumbnail}}"></td>
-                    <td><button id=borrar_{{video.id}}>Borrar</button></td>
-                </tr>
-            {% endfor %}                
-        </table>
+    <div class="container">
+        <div id="player"></div>
+    
+        <div id="controls">
+            <button>Play/Resume</button>
+            <button id="skip" onclick="skip()">Skip</button>
+        </div>
+    
+        <div class="row">
+            <table class="mensajes">
+                <caption><h3>Playlist</h3></caption>                
+                {% for video in videos %}
+                    <tr id="v_{{video.id}}">
+                        <td class="msg-user"> {{ video.user.username }}:</td> 
+                        <td> {{ video.title }} </td>
+                        <td class="thumb"><img class="thumb" src="{{video.thumbnail}}"></td>
+                        <td><button id=borrar_{{video.id}}>Borrar</button></td>
+                    </tr>
+                {% endfor %}                
+            </table>
+        </div>
     </div>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>

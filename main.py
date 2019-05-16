@@ -90,7 +90,7 @@ def currentState():
     return Player.query.first()
 
 def savePlayer(vid):
-    currentState().video_id= Video.query.filter_by(videoid=id).first()
+    currentState().video_id= Video.query.filter_by(videoid=vid).first()
     currentState().video_time = 0
     db.session.commit()
 
@@ -164,11 +164,12 @@ def videosRelated(videoID):
 user_autoplay = getAutoplayUser()
 print('player query first'+str(Player.query.first()))
 if Player.query.first() is None:
-    det = detalle('LDU_Txk06tM')
-    crab_rave = Video(videoid='LDU_Txk06tM',title=det['snippet']['title'], thumbnail = det['snippet']['thumbnails']['high']['url'], user=user_autoplay, activo=True)
-    playerState = Player(video=crab_rave, video_time='74')
+    id_inicial ='-oCPAO3bp4Q'
+    det = detalle(id_inicial)
+    vid_inicial = Video(videoid=id_inicial,title=det['snippet']['title'], thumbnail = det['snippet']['thumbnails']['high']['url'], user=user_autoplay, activo=True)
+    playerState = Player(video=vid_inicial, video_time='0')
     
-    db.session.add(crab_rave)
+    db.session.add(vid_inicial)
     db.session.add(playerState)
     db.session.commit()
 

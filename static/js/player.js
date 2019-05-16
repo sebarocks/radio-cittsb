@@ -14,8 +14,7 @@ var player;
 
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
-        height: '360',
-        width: '640',
+        width: '100%',
         videoId: video,
         events: {
             'onReady': onPlayerReady,
@@ -81,7 +80,7 @@ socket.on('addedVideo', function (msg) {
         // } 
 
         var nuevomensaje = document.createElement('tr');
-        nuevomensaje.innerHTML = '<td class="msg-user">' + msg.user + ':</td><td>' + msg.title + '</td> <td><img class="thumb" src="' + msg.thumbnail + '"><td></td></td>';
+        nuevomensaje.innerHTML = '<td class="msg-user">' + msg.user + ':</td><td>' + msg.title + '</td> <td class="thumb"><img class="thumb" src="' + msg.thumbnail + '"><td></td></td>';
         nuevomensaje.id = 'v_' + msg.id;
         document.querySelector('table.mensajes').appendChild(nuevomensaje);
     }
