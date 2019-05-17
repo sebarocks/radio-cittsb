@@ -13,3 +13,6 @@
 - bug: m.youtube.com
 - bug: F5 no guarda video-time
 - bug: autoplay agrega un stream
+
+https://colorhunt.co/palette/74424
+https://docs.sendwithses.com/random-stuff/easy-to-remember-color-guide-for-non-designers

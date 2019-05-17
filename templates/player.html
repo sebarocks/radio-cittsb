@@ -11,22 +11,26 @@
 
 <body>
     <div class="container">
+        <caption>
+            <h2>Reproductor</h2>
+        </caption>
+
         <div id="player"></div>
     
         <div id="controls">
-            <button>Play/Resume</button>
-            <button id="skip" onclick="skip()">Skip</button>
+            <button class="btn">Play/Resume</button>
+            <button class="btn" id="skip" onclick="skip()">Skip</button>
         </div>
     
         <div class="row">
             <table class="mensajes">
-                <caption><h3>Playlist</h3></caption>                
+                <caption><h2>Playlist</h2></caption>                
                 {% for video in videos %}
                     <tr id="v_{{video.id}}">
                         <td class="msg-user"> {{ video.user.username }}:</td> 
                         <td> {{ video.title }} </td>
                         <td class="thumb"><img class="thumb" src="{{video.thumbnail}}"></td>
-                        <td><button id=borrar_{{video.id}}>Borrar</button></td>
+                        <td><button class="btn" id=borrar_{{video.id}}>Borrar</button></td>
                     </tr>
                 {% endfor %}                
             </table>

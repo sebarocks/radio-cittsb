@@ -6,6 +6,12 @@
     width: 100%;
     max-width: 30em;
     margin: auto;
+    background-color: #c5ecbe;
+    border: 1px solid #4797b1;
+    border-radius: 3px;
+    box-shadow: 1px 1px 5px grey;
+    height: 100vh;
+    padding: 0.5rem;
 }
 
 .row {
@@ -19,38 +25,50 @@ table {
     border-radius: 3px;
 }
 
-table,th,td {
-    border: 1px solid #AAA;
+tr {
+    margin: 0.3em;
+    border: 1px solid #4797b1;
     background-color: #c8e6f5;
 }
 
+td {
+    padding: 0em 1em 0em;
+    border: 0.5px solid #4797b1
+}
+
 fieldset {
-    background-color: #c8e6f5
+    background-color: #c8e6f5;
+    border: 1px solid #4797b1;
 }
 
 body {
     font-family: 'Mukta', sans-serif;
-    color: #6d3939;
-    background-color: #f2eee0;
+    color: #4797b1;
+    background-color: #f7f3ce;
 }
 
 td.msg-user {
     font-weight: bold;
+    width: 20%;
 }
 
 td.thumb {
-    float: right;
+    padding: 0;
+    width: 20%;
 }
 
-img.thumb {
-    height: 4em;
+
+
+img.thumb {   
+    float: left; 
     width: 100%;
+    height: 100%;
 }
 
 input.message {
     min-width: 10em;
     width: 80%;
-    border: 1px solid #AAA;
+    border: 0.5px solid #4797b1;
 }
 
 input.btnEnviar {
@@ -58,7 +76,18 @@ input.btnEnviar {
     border: none;
     margin: auto;
     padding: 4px;
-    border-radius: 2px;
-    background-color: #5ca0d3;
-    color: #6d3939;
+    border-radius: 2px; 
+}
+
+input.btnEnviar:enabled {
+    background-color: #4797b1;
+    color: #f7f3ce;
+}
+
+.btn {
+    padding: 8px 16px 8px;
+    border-radius: 2px; 
+    border: none;
+    background-color: #4797b1;
+    color: #f7f3ce;
 }

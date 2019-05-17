@@ -12,7 +12,7 @@ youtubeKey = secrets.youtubeKey
 socketio = SocketIO(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(os.getcwd(),'radio.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
-print(app.config['SQLALCHEMY_DATABASE_URI'])
+print('>>>>    BD: '+app.config['SQLALCHEMY_DATABASE_URI'])
 db = SQLAlchemy(app)
 
 
@@ -103,7 +103,6 @@ def detalle(vidID): #que pasa si es 404?
 
 # Agrega un video a la base de datos (tabla video)
 def agregarVideo(user,videoID):
-    #print('agregarVideo('+user+','+videoID+')')
 
     det = detalle(videoID)
     titulo = det['snippet']['title']
@@ -137,7 +136,7 @@ def signin(nombre):
         user_actual = User(username=nombre)
         db.session.add(user_actual)
         db.session.commit()
-        print('    {} se registro'.format(user_actual.username))
+        print('>>>>   {} se registro'.format(user_actual.username))
     
     return user_actual
 
@@ -162,7 +161,7 @@ def videosRelated(videoID):
 
 
 user_autoplay = getAutoplayUser()
-print('player query first'+str(Player.query.first()))
+print('>>>>  player begins at '+str(Player.query.first()))
 if Player.query.first() is None:
     id_inicial ='-oCPAO3bp4Q'
     det = detalle(id_inicial)
@@ -228,11 +227,11 @@ def messageRecieved(data, methods=['GET','POST']):
     newVid = agregarVideo(data['username'], data['videoid'])
     respuesta = dict(id=newVid.id, user=newVid.user.username, videoid=newVid.videoid, title=newVid.title, thumbnail=newVid.thumbnail)
     socketio.emit('addedVideo',respuesta)
-    print('    {} agrego video {}'.format(newVid.user.username,newVid.videoid))
+    print('>>>>  {} agrego video {}'.format(newVid.user.username,newVid.videoid))
 
 @socketio.on('siguiente')
 def siguiente(videoIdActual):
-    print('siguiente('+videoIdActual+')')
+    print('>>>>   siguiente('+videoIdActual+')')
     
     vid_actual = Video.query.filter_by(videoid=videoIdActual,activo=True).first()
     newVid = None
@@ -241,7 +240,7 @@ def siguiente(videoIdActual):
         vid_actual.activo = False
         db.session.commit()
         socketio.emit('removedVideo',vid_actual.id)
-        print('     removed: {}'.format(vid_actual.id))
+        print('>>>>   removed: {}'.format(vid_actual.id))
         newVid = Video.query.filter_by(activo=True).first()
 
     if(newVid is None):
@@ -258,7 +257,7 @@ def playerDisconnect(info):
     playerstate = currentState()
     playerstate.video = currentVideo()
     playerstate.video_time = int(info['time'])
-    print('    Disconnect'+str(info))
+    print('>>>>   Disconnect'+str(info))
     db.session.commit()
 
 if __name__ == '__main__':
