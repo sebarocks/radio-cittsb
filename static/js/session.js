@@ -6,6 +6,8 @@ if (!user_name) {
     window.location = '/login'
 }
 
+popPreview();
+
 function matchYoutubeUrl(url){
     //var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
     //var d = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|attribution_link\?a=.+?watch.+?v(?:%|=)))((\w|-){11})(?:\S+)?$/;
@@ -23,6 +25,14 @@ function getDetails(videoID){
             cargarPreview(obj);
         })
         .catch(console.log);
+}
+
+function popPreview(){
+    let prevista = document.querySelector('table.prevista');
+    while(prevista.firstChild){
+        prevista.removeChild(prevista.firstChild);
+    }
+    document.querySelector('form').reset();
 }
 
 function cargarPreview(obj){
@@ -60,9 +70,10 @@ socket.on('connect', function () {
         socket.emit('mensaje', {
             username: user_name,
             videoid: matchYoutubeUrl(user_input)
-        })
+        });
 
-        user_input = '';
+        console.log('enviado'+user_input);
+        popPreview();
     })
 })
 

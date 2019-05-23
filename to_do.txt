@@ -9,8 +9,8 @@
 - mostrar enviando...
 - multi salas
 - no redirect con javascript
+- mejorar navegacion
 
-- bug: m.youtube.com
 - bug: F5 no guarda video-time
 - bug: autoplay agrega un stream
 
