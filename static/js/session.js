@@ -9,8 +9,7 @@ if (!user_name) {
 popPreview();
 
 function matchYoutubeUrl(url){
-    //var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
-    //var d = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|attribution_link\?a=.+?watch.+?v(?:%|=)))((\w|-){11})(?:\S+)?$/;
+
     var d = /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/;
 
     url = (decodeURIComponent(url));
@@ -91,10 +90,8 @@ socket.on('addedVideo', function (msg) {
 })
 
 socket.on('removedVideo', function (msg) {
-    console.log('Removed');
-    console.log(msg);
-    var videoRow = document.getElementById('v_'+msg);
-    videoRow.parentNode.removeChild(videoRow);
+    console.log('Removed '+msg);
+    popVideo(msg);
 })
 
 socket.on('signin', function (msg){
@@ -104,3 +101,8 @@ socket.on('signin', function (msg){
 socket.on('info', function (msg) {
     console.log(msg)
 })
+
+function popVideo(msg){
+    var videoRow = document.getElementById('v_'+msg);
+    videoRow.parentNode.removeChild(videoRow);
+}

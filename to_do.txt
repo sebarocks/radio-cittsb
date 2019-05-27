@@ -4,15 +4,17 @@
 - revivir video
 - Multicolumna, agregar video al costado (usar flexbox?)
 - Borrar de la lista (solo player)
-- Modularizar en distintos archivos
 - now playing en tabla playlist
 - mostrar enviando...
 - multi salas
 - no redirect con javascript
 - mejorar navegacion
+- buscador
+- notificacion ver siguiente autoplay
+- mejorar autoplay
 
-- bug: F5 no guarda video-time
-- bug: autoplay agrega un stream
+- bug: boton borrar no se genera con js
+- bug: no cargar cancion inicial en html
 
 https://colorhunt.co/palette/74424
 https://docs.sendwithses.com/random-stuff/easy-to-remember-color-guide-for-non-designers

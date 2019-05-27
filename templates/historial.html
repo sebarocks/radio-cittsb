@@ -9,6 +9,16 @@
 </head>
 <body>
     <div class="container">
+
+        <div class="navbar">
+            <ul>
+                <li><button class="btn" id="go-session"><a href="/">Playlist</a></button></li>
+                <li><button class="btn" id="go-search"><a href="/player">ir a Player</a></button></li>
+                <li><button class="btn" id="go-search"><a href="/search">Busqueda</a></button></li>
+                <li><button class="btn" id="go-logout">Cerrar Sesion</button></li>
+            </ul>
+        </div>
+
         <div class="row">
             <table class="mensajes">
                 <caption><h3>Historial</h3></caption>                
@@ -17,12 +27,13 @@
                         <td class="msg-user"> {{ video.user.username }}:</td> 
                         <td> {{ video.title }} </td>
                         <td class="thumb"><img class="thumb" src="{{video.thumbnail}}"></td>                  
-                        <td><button>Revivir</button></td>
+                        <td><button class="revivir btn">Revivir</button></td>
                     </tr>
                 {% endfor %}
             </table>
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
     <script src="/static/js/historial.js"></script>
 </body>
 </html>

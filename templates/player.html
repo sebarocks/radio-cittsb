@@ -11,35 +11,47 @@
 
 <body>
     <div class="container">
+
+        <div class="navbar">
+            <ul>
+                <li><button class="btn" id="go-session"><a href="/">Playlist</a></button></li>
+                <li><button class="btn" id="go-search"><a href="/search">Busqueda</a></button></li>
+                <li><button class="btn" id="go-historial"><a href="/historial">Historial</a></button></li>
+                <li><button class="btn" id="go-logout">Cerrar Sesion</button></li>
+            </ul>
+        </div>
+
         <caption>
             <h2>Reproductor</h2>
         </caption>
 
         <div id="player"></div>
-    
+
         <div id="controls">
             <button class="btn">Play/Resume</button>
             <button class="btn" id="skip" onclick="skip()">Skip</button>
         </div>
-    
+
         <div class="row">
             <table class="mensajes">
-                <caption><h2>Playlist</h2></caption>                
+                <caption>
+                    <h2>Playlist</h2>
+                </caption>
                 {% for video in videos %}
-                    <tr id="v_{{video.id}}">
-                        <td class="msg-user"> {{ video.user.username }}:</td> 
-                        <td> {{ video.title }} </td>
-                        <td class="thumb"><img class="thumb" src="{{video.thumbnail}}"></td>
-                        <td><button class="btn" id=borrar_{{video.id}}>Borrar</button></td>
-                    </tr>
-                {% endfor %}                
+                <tr id="v_{{video.id}}">
+                    <td class="msg-user"> {{ video.user.username }}:</td>
+                    <td> {{ video.title }} </td>
+                    <td class="thumb"><img class="thumb" src="{{video.thumbnail}}"></td>
+                    <td><button class="btn" id="borrar_{{video.id}}" onclick="popVideo("{{video.id}}")">Borrar</button></td>
+                </tr>
+                {% endfor %}
             </table>
         </div>
     </div>
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
     <script>
-        var video='{{vid_actual}}';
+        var video = '{{vid_actual}}';
         var startTime = {{time_actual}};
     </script>
     <script src="/static/js/player.js"></script>

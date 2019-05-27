@@ -1,18 +1,17 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_socketio import SocketIO
 from flask_sqlalchemy import SQLAlchemy
-import os, random, json, urllib.request, secrets
+import os, random, json, urllib.request, secret
 
 
 ### APP ###
 
 app = Flask(__name__)
-app.config['CONFIG_KEY'] = secrets.appKey
-youtubeKey = secrets.youtubeKey
+app.config['CONFIG_KEY'] = secret.appKey
+youtubeKey = secret.youtubeKey
 socketio = SocketIO(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(os.getcwd(),'radio.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
-print('>>>>    BD: '+app.config['SQLALCHEMY_DATABASE_URI'])
 db = SQLAlchemy(app)
 
 
@@ -80,6 +79,7 @@ def getAutoplayUser():
 def playlist():
     return Video.query.filter_by(activo=True)
 
+
 def getHistorial():
     return Video.query.filter_by(activo=False)
 
@@ -97,6 +97,7 @@ def savePlayer(vid):
 def detalle(vidID): #que pasa si es 404?
     dataUrl = 'https://www.googleapis.com/youtube/v3/videos?id={}&key={}&fields=items(id,snippet(channelTitle,title,thumbnails))&part=snippet'.format(vidID,youtubeKey)
     vidInfo = urllib.request.urlopen(dataUrl) #.decode('utf-8')
+    print('REQUEST > '+dataUrl)
     det = json.load(vidInfo)
     return det['items'][0]
 
@@ -136,15 +137,15 @@ def signin(nombre):
         user_actual = User(username=nombre)
         db.session.add(user_actual)
         db.session.commit()
-        print('>>>>   {} se registro'.format(user_actual.username))
     
     return user_actual
 
 
 # Retorna un array con Video IDs relacionados (la API key afecta el resultado)
 def videosRelated(videoID):
-    dataUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&relatedToVideoId={}&type=video&key={}'.format(videoID,secrets.youtubeKey)
+    dataUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&relatedToVideoId={}&type=video&key={}'.format(videoID,secret.youtubeKey)
     vidInfo = urllib.request.urlopen(dataUrl)
+    print('REQUEST > '+dataUrl)
     det = json.load(vidInfo)
     vids = []
     for item in det['items']:
@@ -161,7 +162,6 @@ def videosRelated(videoID):
 
 
 user_autoplay = getAutoplayUser()
-print('>>>>  player begins at '+str(Player.query.first()))
 if Player.query.first() is None:
     id_inicial ='-oCPAO3bp4Q'
     det = detalle(id_inicial)
@@ -213,7 +213,9 @@ def details():
     r_thumb = det['snippet']['thumbnails']['high']['url']
     return jsonify(dict(titulo=r_titulo,miniatura=r_thumb))
 
-
+@app.route('/buscador')
+def buscador():
+    return render_template('buscador.html')
 
 
 
@@ -227,11 +229,9 @@ def messageRecieved(data, methods=['GET','POST']):
     newVid = agregarVideo(data['username'], data['videoid'])
     respuesta = dict(id=newVid.id, user=newVid.user.username, videoid=newVid.videoid, title=newVid.title, thumbnail=newVid.thumbnail)
     socketio.emit('addedVideo',respuesta)
-    print('>>>>  {} agrego video {}'.format(newVid.user.username,newVid.videoid))
 
 @socketio.on('siguiente')
 def siguiente(videoIdActual):
-    print('>>>>   siguiente('+videoIdActual+')')
     
     vid_actual = Video.query.filter_by(videoid=videoIdActual,activo=True).first()
     newVid = None
@@ -240,7 +240,6 @@ def siguiente(videoIdActual):
         vid_actual.activo = False
         db.session.commit()
         socketio.emit('removedVideo',vid_actual.id)
-        print('>>>>   removed: {}'.format(vid_actual.id))
         newVid = Video.query.filter_by(activo=True).first()
 
     if(newVid is None):
@@ -257,8 +256,17 @@ def playerDisconnect(info):
     playerstate = currentState()
     playerstate.video = currentVideo()
     playerstate.video_time = int(info['time'])
-    print('>>>>   Disconnect'+str(info))
     db.session.commit()
+
+@socketio.on('removeVideo')
+def removeVideo(info):
+    vid_to_remove = Video.query.filter_by(videoid=info).first()
+    if(vid_to_remove is not None):
+        vid_to_remove.activo = False
+        db.session.commit()
+        socketio.emit('removedVideo',info)
+
+
 
 if __name__ == '__main__':
     socketio.run(app)

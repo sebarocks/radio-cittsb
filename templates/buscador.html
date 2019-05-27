@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Buscador</title>
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="navbar">
+            <ul>
+                <li><button class="btn" id="go-session"><a href="/">Playlist</a></button></li>
+                <li><button class="btn" id="go-search"><a href="/player">ir a Player</a></button></li>
+                <li><button class="btn" id="go-historial"><a href="/historial">Historial</a></button></li>
+                <li><button class="btn" id="go-logout">Cerrar Sesion</button></li>
+            </ul>
+        </div>
+
+        <div class="row">
+
+            <fieldset>
+                <legend>Agregar Video</legend>
+                <input type="text" class="message" placeholder="Busqueda de Youtube" />
+                <input type="submit" class="btnEnviar" value="Buscar" disabled="disabled" />
+                <table class="resultados">
+                </table>
+            </fieldset>
+
+        </div>
+    </div>
+</body>
+
+</html>

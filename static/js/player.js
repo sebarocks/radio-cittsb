@@ -28,6 +28,15 @@ function onPlayerReady(event) {
     event.target.playVideo();
     event.target.seekTo(startTime);
 
+    var emitEstado = function () {
+        estado = {
+            vid: player.getVideoData().video_id,
+            time: player.getCurrentTime()
+        };
+    
+        socket.emit('playerout', estado);
+    }
+    window.setInterval(emitEstado, 8000);
 }
 
 function onStateChange(event) {
@@ -73,28 +82,22 @@ socket.on('addedVideo', function (msg) {
     console.log(msg)
     if (typeof msg.videoid !== "undefined") {
 
-        // if(player.getPlayerState() == 5){
-        //     console.log('addedvideo-state5');
-        //     player.loadVideoById(msg.videoid);
-        //     player.playVideo();
-        // } 
-
         var nuevomensaje = document.createElement('tr');
-        nuevomensaje.innerHTML = '<td class="msg-user">' + msg.user + ':</td><td>' + msg.title + '</td> <td class="thumb"><img class="thumb" src="' + msg.thumbnail + '"><td></td></td>';
+        nuevomensaje.innerHTML = '<td class="msg-user">' + msg.user + ':</td><td>' 
+                + msg.title + '</td> <td class="thumb"><img class="thumb" src="' 
+                + msg.thumbnail + '"><td><button class="btn" id="borrar_' + msg.id
+                + '" onclick=popVideo("' + msg.id + '")>Borrar</button></td></td>';
         nuevomensaje.id = 'v_' + msg.id;
         document.querySelector('table.mensajes').appendChild(nuevomensaje);
     }
 })
 
 socket.on('removedVideo', function (msg) {
-    console.log('Removed');
-    console.log(msg);
     var videoRow = document.getElementById('v_' + msg);
     videoRow.parentNode.removeChild(videoRow);
 })
 
 socket.on('playVideo', function (msg) {
-    console.log('musica tito! ' + msg)
     if (typeof msg !== "undefined") {
 
         player.loadVideoById(msg)
@@ -109,11 +112,9 @@ function skip(){
     socket.emit('siguiente',player.getVideoData().video_id);
 }
 
-window.onbeforeunload = function () {
-    estado = {
-        vid: player.getVideoData().video_id,
-        time: player.getCurrentTime()
-    };
-
-    socket.emit('playerout', estado);
+function popVideo(msg){
+    if(msg==player.getVideoData().video_id){
+        socket.emit('siguiente',player.getVideoData().video_id);
+    }
+    socket.emit('removeVideo',msg);
 }
