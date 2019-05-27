@@ -83,6 +83,19 @@ input.btnEnviar:enabled {
     color: #f7f3ce;
 }
 
+input.btnBuscar {
+    width: 5em;
+    border: none;
+    margin: auto;
+    padding: 4px;
+    border-radius: 2px; 
+}
+
+input.btnBuscar:enabled {
+    background-color: #4797b1;
+    color: #f7f3ce;
+}
+
 .btn {
     padding: 8px 16px 8px;
     border-radius: 2px; 

@@ -42,7 +42,7 @@ function cargarPreview(obj){
     }
 
     let previewRow = document.createElement('tr');
-    previewRow.innerHTML = '<td>' + obj.titulo + '</td> <td><img class="thumb" src="' + obj.miniatura + '"></td>';
+    previewRow.innerHTML = '<td>' + obj.titulo + '</td> <td class="thumb"><img class="thumb" src="' + obj.miniatura + '"></td>';
     document.querySelector('table.prevista').appendChild(previewRow);
 }
 
@@ -83,7 +83,7 @@ socket.on('addedVideo', function (msg) {
     if (typeof msg.videoid !== "undefined") {
 
         var nuevomensaje = document.createElement('tr');
-        nuevomensaje.innerHTML = '<td class="msg-user">' + msg.user + ':</td><td>' + msg.title + '</td> <td><img class="thumb" src="' + msg.thumbnail + '"></td>';
+        nuevomensaje.innerHTML = '<td class="msg-user">' + msg.user + ':</td><td>' + msg.title + '</td> <td class="thumb"><img class="thumb" src="' + msg.thumbnail + '"></td>';
         nuevomensaje.id = 'v_'+msg.id;
         document.querySelector('table.mensajes').appendChild(nuevomensaje);
     }

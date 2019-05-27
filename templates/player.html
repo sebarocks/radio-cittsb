@@ -42,7 +42,7 @@
                     <td class="msg-user"> {{ video.user.username }}:</td>
                     <td> {{ video.title }} </td>
                     <td class="thumb"><img class="thumb" src="{{video.thumbnail}}"></td>
-                    <td><button class="btn" id="borrar_{{video.id}}" onclick="popVideo("{{video.id}}")">Borrar</button></td>
+                    <td><button class="btn" id="borrar_{{video.id}}" onclick="popVideo('{{video.id}}')">Borrar</button></td>
                 </tr>
                 {% endfor %}
             </table>

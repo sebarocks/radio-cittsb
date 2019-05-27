@@ -22,16 +22,20 @@
 
         <div class="row">
 
-            <fieldset>
-                <legend>Agregar Video</legend>
-                <input type="text" class="message" placeholder="Busqueda de Youtube" />
-                <input type="submit" class="btnEnviar" value="Buscar" disabled="disabled" />
-                <table class="resultados">
-                </table>
-            </fieldset>
+            <form action="" method="POST" >
+                <fieldset>
+                    <legend>Buscar Video</legend>
+                    <input type="text" class="message" placeholder="Busqueda de Youtube" />
+                    <input type="submit" class="btnBuscar" value="Buscar" disabled="disabled" />
+                    <table class="resultados">
+                    </table>
+                </fieldset>
+            </form>
 
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+    <script src="static/js/buscador.js"></script>
 </body>
 
 </html>

@@ -213,12 +213,20 @@ def details():
     r_thumb = det['snippet']['thumbnails']['high']['url']
     return jsonify(dict(titulo=r_titulo,miniatura=r_thumb))
 
-@app.route('/buscador')
+@app.route('/search')
 def buscador():
     return render_template('buscador.html')
 
-
-
+@app.route('/buscar')
+def buscar():
+    
+    termino = request.args.get('q')
+    termino = urllib.parse.quote_plus(termino)
+    dataUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q={}&key={}&fields=items(id,snippet(channelTitle,title,thumbnails))'.format(termino,secret.youtubeKey)
+    vidInfo = urllib.request.urlopen(dataUrl)
+    datos = json.load(vidInfo)
+    print('REQUEST > '+dataUrl)    
+    return jsonify(datos)
 
 
 

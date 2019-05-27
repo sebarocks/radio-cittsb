@@ -86,7 +86,7 @@ socket.on('addedVideo', function (msg) {
         nuevomensaje.innerHTML = '<td class="msg-user">' + msg.user + ':</td><td>' 
                 + msg.title + '</td> <td class="thumb"><img class="thumb" src="' 
                 + msg.thumbnail + '"><td><button class="btn" id="borrar_' + msg.id
-                + '" onclick=popVideo("' + msg.id + '")>Borrar</button></td></td>';
+                + '" onclick="popVideo(\'' + msg.id + '\')">Borrar</button></td></td>';
         nuevomensaje.id = 'v_' + msg.id;
         document.querySelector('table.mensajes').appendChild(nuevomensaje);
     }
@@ -100,7 +100,7 @@ socket.on('removedVideo', function (msg) {
 socket.on('playVideo', function (msg) {
     if (typeof msg !== "undefined") {
 
-        player.loadVideoById(msg)
+        player.loadVideoById(msg);
     }
 })
 
