@@ -13,8 +13,8 @@
 - notificacion ver siguiente autoplay
 - mejorar autoplay
 
-- bug: boton borrar no se genera con js
-- bug: no cargar cancion inicial en html
+- bug: no cargar cancion inicial con html
+- bug: savestate en inicio de cancion (algo pasa)
 
 https://colorhunt.co/palette/74424
 https://docs.sendwithses.com/random-stuff/easy-to-remember-color-guide-for-non-designers
