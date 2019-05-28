@@ -95,7 +95,7 @@ def savePlayer(vid):
     db.session.commit()
 
 def detalle(vidID): #que pasa si es 404?
-    dataUrl = 'https://www.googleapis.com/youtube/v3/videos?id={}&key={}&fields=items(id,snippet(channelTitle,title,thumbnails))&part=snippet'.format(vidID,youtubeKey)
+    dataUrl = 'https://www.googleapis.com/youtube/v3/videos?id={}&key={}&fields=items(id,snippet(channelTitle,title,thumbnails(default)))&part=snippet'.format(vidID,youtubeKey)
     vidInfo = urllib.request.urlopen(dataUrl) #.decode('utf-8')
     print('REQUEST > '+dataUrl)
     det = json.load(vidInfo)
@@ -143,7 +143,7 @@ def signin(nombre):
 
 # Retorna un array con Video IDs relacionados (la API key afecta el resultado)
 def videosRelated(videoID):
-    dataUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&relatedToVideoId={}&type=video&key={}'.format(videoID,secret.youtubeKey)
+    dataUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&relatedToVideoId={}&type=video&key={}&fields=items(id)'.format(videoID,secret.youtubeKey)
     vidInfo = urllib.request.urlopen(dataUrl)
     print('REQUEST > '+dataUrl)
     det = json.load(vidInfo)
@@ -222,7 +222,7 @@ def buscar():
     
     termino = request.args.get('q')
     termino = urllib.parse.quote_plus(termino)
-    dataUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&kind=video&maxResults=15&q={}&key={}&fields=items(id,snippet(channelTitle,title,thumbnails))'.format(termino,secret.youtubeKey)
+    dataUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&kind=video&maxResults=10&q={}&key={}&fields=items(id,snippet(channelTitle,title,thumbnails(default)))'.format(termino,secret.youtubeKey)
     vidInfo = urllib.request.urlopen(dataUrl)
     datos = json.load(vidInfo)
     print('REQUEST > '+dataUrl)    

@@ -1,12 +1,12 @@
 
 - lista de online (usando socket.io)
-- barrita de avance, indicador de play/pause
+- /control para dueño
+- prohibir /player a no dueños
 - revivir video
 - now playing en tabla playlist
 - mostrar enviando...
 - multi salas
 - no redirect con javascript
-- buscador
 - notificacion ver siguiente autoplay
 - mejorar autoplay
 
