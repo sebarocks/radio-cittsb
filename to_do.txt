@@ -10,6 +10,7 @@
 - notificacion ver siguiente autoplay
 - mejorar autoplay
 
+- bug: ordenar botones navbar
 - bug: no cargar cancion inicial con html
 - bug: savestate en inicio de cancion (algo pasa)
 

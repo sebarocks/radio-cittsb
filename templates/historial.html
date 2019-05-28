@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,28 +8,32 @@
     <title>Radio Cittsb - Historial</title>
     <link rel="stylesheet" href="static/css/style.css">
 </head>
+
 <body>
     <div class="container">
 
         <div class="navbar">
             <ul>
                 <li><button class="btn" id="go-session"><a href="/">Playlist</a></button></li>
-                <li><button class="btn" id="go-search"><a href="/player">ir a Player</a></button></li>
+                <li><button class="btn" id="go-search"><a href="/player">Player</a></button></li>
+                <li><button disabled="true" class="btn" id="go-historial"><a href="/historial">Historial</a></button></li>
                 <li><button class="btn" id="go-search"><a href="/search">Busqueda</a></button></li>
-                <li><button class="btn" id="go-logout">Cerrar Sesion</button></li>
+                <li><button class="btn right" id="go-logout">Cerrar Sesion</button></li>
             </ul>
         </div>
 
         <div class="row">
             <table class="mensajes">
-                <caption><h3>Historial</h3></caption>                
+                <caption>
+                    <h2>Historial</h2>
+                </caption>
                 {% for video in videos %}
-                    <tr id="v_{{video.id}}">
-                        <td class="msg-user"> {{ video.user.username }}:</td> 
-                        <td> {{ video.title }} </td>
-                        <td class="thumb"><img class="thumb" src="{{video.thumbnail}}"></td>                  
-                        <td><button class="revivir btn">Revivir</button></td>
-                    </tr>
+                <tr id="v_{{video.id}}">
+                    <td class="msg-user"> {{ video.user.username }}:</td>
+                    <td> {{ video.title }} </td>
+                    <td class="thumb"><img class="thumb" src="{{video.thumbnail}}"></td>
+                    <td><button class="revivir btn">Revivir</button></td>
+                </tr>
                 {% endfor %}
             </table>
         </div>
@@ -36,4 +41,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
     <script src="/static/js/historial.js"></script>
 </body>
+
 </html>

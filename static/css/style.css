@@ -4,10 +4,10 @@
 
 .container {
     width: 100%;
-    max-width: 30em;
+    max-width: 35em;
     margin: auto;
-    background-color: #c5ecbe;
-    border: 1px solid #4797b1;
+    background-color: #d6f9b5;
+    border: 1px solid #70a1d7;
     border-radius: 3px;
     box-shadow: 1px 1px 5px grey;
     height: 100%;
@@ -28,24 +28,24 @@ table {
 
 tr {
     margin: 0.3em;
-    border: 1px solid #4797b1;
-    background-color: #c8e6f5;
+    border: 1px solid #70a1d7;
+    background-color: #d6f2f1;
 }
 
 td {
     padding: 0em 1em 0em;
-    border: 0.5px solid #4797b1
+    border: 0.5px solid #70a1d7
 }
 
 fieldset {
-    background-color: #c8e6f5;
-    border: 1px solid #4797b1;
+    background-color: #d6f2f1;
+    border: 1px solid #70a1d7;
 }
 
 body {
     font-family: 'Mukta', sans-serif;
-    color: #4797b1;
-    background-color: #f7f3ce;
+    color: #70a1d7;
+    background-color: #fefdca;
 }
 
 td.msg-user {
@@ -68,9 +68,13 @@ img.thumb {
 input.message {
     min-width: 10em;
     width: 80%;
-    border: 0.5px solid #4797b1;
+    border: 0.5px solid #70a1d7;
 }
 
+h2 {
+    text-align: center;
+    margin-bottom: 5px;
+}
 
 .btn {
     font-family: 'Mukta', sans-serif;
@@ -80,16 +84,16 @@ input.message {
     border-radius: 2px; 
     border: none;
     margin: auto;
-    background-color: #4797b1;
+    background-color: #70a1d7;
     color: white;
 }
 
 .btn:enabled {
-    background-color: #4797b1;
+    background-color: #70a1d7;
 }
 
 .btn:enabled:active {
-    background-color: #c8e6f5;
+    background-color: #a5dee5;
 }
 
 .btn:disabled {
@@ -102,8 +106,13 @@ input.message {
     text-decoration: none;
 }
 
-.navbar > ul {    
+.navbar > ul {
+    margin: 0;
     list-style: none;
+    background-color: #d6f2f1;
+    padding: 5px;
+    border-radius: 3px;
+    border: 1px solid #70a1d7;
 }
 
 .navbar > ul > li {
@@ -116,11 +125,15 @@ p {
 }
 
 p.tituloVid {
-    font-size: large;
     line-height: 1.2em;
     margin-bottom: 0.5em;
 }
 
 p.autorVid {
     font-size: smaller;
+}
+
+#go-logout{
+    background-color: #f47c7c;
+    float: right;
 }

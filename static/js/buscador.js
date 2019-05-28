@@ -6,7 +6,7 @@ if (!user_name) {
     window.location = '/'
 }
 
-var tempResults = new Array();
+var tempResults = [];
 
 function generarTr(v_id, srcThumb, title, autor) {
     let newTr = document.createElement('tr');
@@ -28,6 +28,7 @@ function generarTr(v_id, srcThumb, title, autor) {
 
     let addTd = document.createElement('td');
     let addBtn = document.createElement('button');
+    addBtn.setAttribute('type','button');
     addBtn.className='btn';
     addBtn.textContent = 'Agregar Video';
     addBtn.onclick = agregarVideo;

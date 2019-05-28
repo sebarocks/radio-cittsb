@@ -90,8 +90,9 @@ def currentState():
     return Player.query.first()
 
 def savePlayer(vid):
-    currentState().video_id= Video.query.filter_by(videoid=vid).first()
-    currentState().video_time = 0
+    player_now = currentState()
+    player_now.video_id= Video.query.filter_by(videoid=vid).first().videoid
+    player_now.video_time = 0
     db.session.commit()
 
 def detalle(vidID): #que pasa si es 404?
@@ -107,7 +108,7 @@ def agregarVideo(user,videoID):
 
     det = detalle(videoID)
     titulo = det['snippet']['title']
-    miniatura = det['snippet']['thumbnails']['high']['url']
+    miniatura = det['snippet']['thumbnails']['default']['url']
 
     user_actual = User.query.filter_by(username=user).first()
 
@@ -123,7 +124,7 @@ def revivir(user, vIdDb):
     muerto = Video.query.filter_by(id=vIdDb).first()
     det = detalle(muerto.videoid)
     r_titulo = det['snippet']['title']
-    r_thumb = det['snippet']['thumbnails']['high']['url']
+    r_thumb = det['snippet']['thumbnails']['default']['url']
     renacido = Video(videoid=muerto.videoid, title=r_titulo, thumbnail=r_thumb,activo=True)
     db.session.add(renacido)
     db.session.commit()
@@ -165,7 +166,7 @@ user_autoplay = getAutoplayUser()
 if Player.query.first() is None:
     id_inicial ='-oCPAO3bp4Q'
     det = detalle(id_inicial)
-    vid_inicial = Video(videoid=id_inicial,title=det['snippet']['title'], thumbnail = det['snippet']['thumbnails']['high']['url'], user=user_autoplay, activo=True)
+    vid_inicial = Video(videoid=id_inicial,title=det['snippet']['title'], thumbnail = det['snippet']['thumbnails']['default']['url'], user=user_autoplay, activo=True)
     playerState = Player(video=vid_inicial, video_time='0')
     
     db.session.add(vid_inicial)
@@ -210,7 +211,7 @@ def details():
     iddetalle=request.args['vid']
     det = detalle(iddetalle)
     r_titulo = det['snippet']['title']
-    r_thumb = det['snippet']['thumbnails']['high']['url']
+    r_thumb = det['snippet']['thumbnails']['default']['url']
     return jsonify(dict(titulo=r_titulo,miniatura=r_thumb))
 
 @app.route('/search')
