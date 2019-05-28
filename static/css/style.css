@@ -23,6 +23,7 @@ table {
     border-collapse: collapse;
     width: 100%;
     border-radius: 3px;
+    margin-top: 1em;
 }
 
 tr {
@@ -70,38 +71,30 @@ input.message {
     border: 0.5px solid #4797b1;
 }
 
-input.btnEnviar {
-    width: 5em;
-    border: none;
-    margin: auto;
-    padding: 4px;
-    border-radius: 2px; 
-}
-
-input.btnEnviar:enabled {
-    background-color: #4797b1;
-    color: #f7f3ce;
-}
-
-input.btnBuscar {
-    width: 5em;
-    border: none;
-    margin: auto;
-    padding: 4px;
-    border-radius: 2px; 
-}
-
-input.btnBuscar:enabled {
-    background-color: #4797b1;
-    color: #f7f3ce;
-}
 
 .btn {
-    padding: 8px 16px 8px;
+    font-family: 'Mukta', sans-serif;
+    min-width: 5em;
+    line-height: 1.2em;
+    padding: 5px 16px 5px;
     border-radius: 2px; 
     border: none;
+    margin: auto;
     background-color: #4797b1;
-    color: #f7f3ce;
+    color: white;
+}
+
+.btn:enabled {
+    background-color: #4797b1;
+}
+
+.btn:enabled:active {
+    background-color: #c8e6f5;
+}
+
+.btn:disabled {
+    background-color: gray;
+    color: white;
 }
 
 .btn > a {
@@ -115,4 +108,19 @@ input.btnBuscar:enabled {
 
 .navbar > ul > li {
     display: inline;
+    margin: auto;
+}
+
+p {
+    margin: 0.2em;    
+}
+
+p.tituloVid {
+    font-size: large;
+    line-height: 1.2em;
+    margin-bottom: 0.5em;
+}
+
+p.autorVid {
+    font-size: smaller;
 }
