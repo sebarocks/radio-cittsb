@@ -52,7 +52,8 @@ class Player(db.Model):
     def __repr__(self):
         return '<Player %r %r>' % (self.video_id, self.video_time)
 
-db.create_all()
+with app.app_context():
+    db.create_all()
 
 
 
@@ -97,8 +98,8 @@ def savePlayer(vid):
 
 def detalle(vidID): #que pasa si es 404?
     dataUrl = 'https://www.googleapis.com/youtube/v3/videos?id={}&key={}&fields=items(id,snippet(channelTitle,title,thumbnails(default)))&part=snippet'.format(vidID,youtubeKey)
-    vidInfo = urllib.request.urlopen(dataUrl) #.decode('utf-8')
     print('REQUEST > '+dataUrl)
+    vidInfo = urllib.request.urlopen(dataUrl) #.decode('utf-8')
     det = json.load(vidInfo)
     return det['items'][0]
 
@@ -145,8 +146,8 @@ def signin(nombre):
 # Retorna un array con Video IDs relacionados (la API key afecta el resultado)
 def videosRelated(videoID):
     dataUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&relatedToVideoId={}&type=video&key={}&fields=items(id)'.format(videoID,secret.youtubeKey)
-    vidInfo = urllib.request.urlopen(dataUrl)
     print('REQUEST > '+dataUrl)
+    vidInfo = urllib.request.urlopen(dataUrl)
     det = json.load(vidInfo)
     vids = []
     for item in det['items']:
@@ -161,17 +162,17 @@ def videosRelated(videoID):
 
 ### DATOS INICIALES ###
 
-
-user_autoplay = getAutoplayUser()
-if Player.query.first() is None:
-    id_inicial ='-oCPAO3bp4Q'
-    det = detalle(id_inicial)
-    vid_inicial = Video(videoid=id_inicial,title=det['snippet']['title'], thumbnail = det['snippet']['thumbnails']['default']['url'], user=user_autoplay, activo=True)
-    playerState = Player(video=vid_inicial, video_time='0')
-    
-    db.session.add(vid_inicial)
-    db.session.add(playerState)
-    db.session.commit()
+with app.app_context():
+    user_autoplay = getAutoplayUser()
+    if Player.query.first() is None:
+        id_inicial ='-oCPAO3bp4Q'
+        det = detalle(id_inicial)
+        vid_inicial = Video(videoid=id_inicial,title=det['snippet']['title'], thumbnail = det['snippet']['thumbnails']['default']['url'], user=user_autoplay, activo=True)
+        playerState = Player(video=vid_inicial, video_time='0')
+        
+        db.session.add(vid_inicial)
+        db.session.add(playerState)
+        db.session.commit()
 
 
 
